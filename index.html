@@ -16,6 +16,12 @@
         <label for="username">name</label>
         <input type="text" id="name"> <br><br>
 
+        <label for="username">Username</label>
+        <input type="text" id="username"> <br><br>
+
+
+
+
         <label for="password">password</label>
         <input type="text" id="password"> <br><br>
 
@@ -34,14 +40,16 @@
 
 
             var name = document.querySelector("#name").value;
+            var username = document.getElementById('username').value;
             var password = document.querySelector("#password").value;
 
             event.preventDefault();
 
 
             axios.post('https://social-meida-server-tasco.herokuapp.com/user', {
-                name: name,
-                password: password
+                fullname: name,
+                password: password,
+                username : username
             })
                 .then(function (response) {
 
@@ -56,28 +64,20 @@
         }
 
         function print() {
-          
-            axios.get('https://social-meida-server-tasco.herokuapp.com/user')
-                .then(function (response) {
-                    // handle success
-                    console.log(response);
 
-                    response.data.map(eachuser=> {
-                        document.querySelector("#getall").innerHTML +=`<b>${eachuser.name}</b> ${eachuser.password}<br>`
-                        
-                    })
+axios.get("https://social-media-server-sysborg.herokuapp.com/user")
+    .then(function (response) {
+        console.log(response.data);
+
+        response.data.map(eachUser => {
+            document.querySelector("#allUserList").innerHTML +=
+
+                `<b>${eachUser.fullname}</b> ${eachUser.username} ${eachUser.password} <br>`;
+        })
 
 
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-                .then(function () {
-                    // always executed
-                });
-
-        }
+    })
+}
     </script>
 </body>
 
