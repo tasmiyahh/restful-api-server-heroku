@@ -12,7 +12,7 @@ let users = [];
 //create a random id 
 
 function randomNumber(){
-  Math.floor(math.random()* 10000000);
+  return Math.floor(math.random()* 10000000000);
 }
 
 
