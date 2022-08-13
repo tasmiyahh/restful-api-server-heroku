@@ -39,14 +39,14 @@ res.send(users)
 
 //client fala id ka user get krna chahta h tw  oski bheji hui userid hmay req.params.userid is me mile g
 
-app.get('/user/userId', (req, res) => {
+app.get('/user/:userId', (req, res) => {
   let userId = req.params.userId;
 
   let isFound = false;
 
-  for(i= 0 ; i <users.length ; i++){
+  for(let i= 0 ; i <users.length ; i++){
     if(users[i].id == userId){
-      req.send(users[i]);
+      res.send(users[i]);
       isFound = true
       break;
     }
@@ -59,14 +59,14 @@ app.get('/user/userId', (req, res) => {
 
 //modify user
 
-app.put('/user/userId', (req, res) => {
+app.put('/user/:userId', (req, res) => {
 
   let userId = req.params.userId;
   let userIndex = -1;
 
-  for(i= 0 ; i <users.length ; i++){
+  for(let i= 0 ; i <users.length ; i++){
     if(users[i].id == userId){
-    users = i ;
+    userIndex = i ;
 
       break;
     }
@@ -88,10 +88,20 @@ app.put('/user/userId', (req, res) => {
 res.send(users[userIndex]);
 })
 
-app.delete('/user/userId', (req, res) => {
+app.delete('/user/:userId', (req, res) => {
 
   userId = req.params.userId;
   let userIndex = -1;
+
+  for(let i = 0 ; i< users.length ; i++){
+    if(users[i].id == userId){
+      userIndex = i ;
+  
+        break;
+      }
+  }  
+  
+  
 
   if(userIndex == -1){
     res.send("user not found");
@@ -99,10 +109,8 @@ app.delete('/user/userId', (req, res) => {
     users.splice(userIndex , 1);
     res.send("user is deleted")
   }
-
+  })
   
-res.send('')
-})
 
 app.delete('/users', (req, res) => {
   
