@@ -32,14 +32,14 @@
 
     <button onclick="print()">get data </button>
     <h2>response</h2>
-    <p id="getall" > </p>
+    <p id="get" > </p>
 
 
     <script>
         function signup(event) {
 
 
-            var name = document.querySelector("#name").value;
+            var fullname = document.querySelector("#name").value;
             var username = document.getElementById('username').value;
             var password = document.querySelector("#password").value;
 
@@ -47,7 +47,7 @@
 
 
             axios.post('https://social-meida-server-tasco.herokuapp.com/user', {
-                fullname: name,
+                fullname: fullname,
                 password: password,
                 username : username
             })
@@ -65,19 +65,28 @@
 
         function print() {
 
-axios.get("https://social-media-server-sysborg.herokuapp.com/user")
-    .then(function (response) {
-        console.log(response.data);
+            axios.get('https://social-meida-server-tasco.herokuapp.com/users')
+                .then(function (response) {
+                    // handle success
+                    console.log(response.data);
 
-        response.data.map(eachUser => {
-            document.querySelector("#allUserList").innerHTML +=
+                    response.data.map(eachuser=> {
+                        document.querySelector("#get").innerHTML +=`<b>${eachuser.fullname}<b><br>${eachuser.password}${eachuser.username}<br>`
+                        
+                    })
 
-                `<b>${eachUser.fullname}</b> ${eachUser.username} ${eachUser.password} <br>`;
-        })
 
 
-    })
-}
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+                .then(function () {
+                    // always executed
+                });
+
+        }
     </script>
 </body>
 
