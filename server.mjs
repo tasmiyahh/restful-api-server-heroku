@@ -9,132 +9,120 @@ const port = process.env.PORT || 3000;
 let users = [];
 
 
-//create a random id 
 
-function randomNumber(){
-  return Math.floor(math.random()* 10000000000);
+function randomNumber() {
+    return Math.floor(Math.random() * 100000000000);
 }
 
 
-//to create user
-app.post('/user', (req, res) => {
+app.post("/user", (req, res) => {
 
- 
+    console.log(req.body);
 
- let newUser= {
-  id : randomNumber(),
-  name : req.body.name,
-  password : req.body.password
- }
+    let newUser = {
+        id: randomNumber(),
+        fullname: req.body.fullname,
+        username: req.body.username,
+        password: req.body.password
+    }
 
- users.push(newUser);
-  
-res.send("user is created");
+    users.push(newUser);
+    res.send("user is created");
 })
 
-app.get('/users', (req, res) => {
-  
-res.send(users)
+app.get("/user/:userId", (req, res) => { // get single user
+
+    let userId = req.params.userId;
+    let isFound = false;
+
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id == userId) {
+            res.send(users[i]);
+            isFound = true;
+            break;
+        }
+    }
+    if (!isFound) {
+        res.send("user not found");
+    }
 })
 
-//client fala id ka user get krna chahta h tw  oski bheji hui userid hmay req.params.userid is me mile g
+app.get("/users", (req, res) => { // get all users
+    res.send(users);
+})
 
-app.get('/user/:userId', (req, res) => {
-  let userId = req.params.userId;
+app.put("/user/:userId", (req, res) => { // to modify single user
+    res.send("your user is modified");
 
-  let isFound = false;
+    let userId = req.params.userId;
+    let userIndex = -1
 
-  for(let i= 0 ; i <users.length ; i++){
-    if(users[i].id == userId){
-      res.send(users[i]);
-      isFound = true
-      break;
-    }
-  }
-    if (!isFound){
-      res.send("user not found");
-    }
-  })
-  
-
-//modify user
-
-app.put('/user/:userId', (req, res) => {
-
-  let userId = req.params.userId;
-  let userIndex = -1;
-
-  for(let i= 0 ; i <users.length ; i++){
-    if(users[i].id == userId){
-    userIndex = i ;
-
-      break;
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id == userId) {
+            userIndex = i;
+            break;
+        }
     }
 
-    //agr req.body me password bheja h modification kliye tw modify krdo
-    if(userIndex === -1){
-      res.send("user not found")
-    }else{
-      if(req.body.name){
-        users[userIndex].name = req.body.name;
-      }
-      if(req.body.password){
-        users[userIndex].name = req.body.password;
-      }
+    if (userIndex === -1) {
+        res.send("user not found");
+    } else {
+
+        if (req.body.fullname) {
+            users[userIndex].fullname = req.body.fullname
+        };
+        if (req.body.username) {
+            users[userIndex].username = req.body.username
+        };
+        if (req.body.password) {
+            users[userIndex].password = req.body.password
+        };
+
+        res.send(users[userIndex]);
+    }
+})
+
+app.delete("/user/:userId", (req, res) => { // delete single user
+
+    let userId = req.params.userId;
+    let userIndex = -1
+
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id == userId) {
+            userIndex = i;
+            break;
+        }
+    }
+
+    if (userIndex === -1) {
+
+        res.send("user not found");
+
+    } else {
+
+        users.splice(userIndex, 1);
+        res.send("user is deleted");
+    }
+})
+
+app.delete("/users", (req, res) => { // delete all users
     
-    }
-  }
-  // is me jo modify kiya hota h wo poora bhj dety 
-res.send(users[userIndex]);
+    users = [];
+    
+    res.send("all users deleted");
 })
-
-app.delete('/user/:userId', (req, res) => {
-
-  userId = req.params.userId;
-  let userIndex = -1;
-
-  for(let i = 0 ; i< users.length ; i++){
-    if(users[i].id == userId){
-      userIndex = i ;
-  
-        break;
-      }
-  }  
-  
-  
-
-  if(userIndex == -1){
-    res.send("user not found");
-  }else{
-    users.splice(userIndex , 1);
-    res.send("user is deleted")
-  }
-  })
-  
-
-app.delete('/users', (req, res) => {
-  
-  users = [];
-  res.send("all user are deleted")
-  })
-  
-
-
-
-
-
 
 
 app.get('/', (req, res) => {
-    console.log("ek req server pe aye ");
-  res.send('Hello World!')
+    console.log("aik request server per i");
+    res.send('Hello World!')
 })
 
-app.get('/profile', (req , res)=>{
-  console.log("ek aur req server pe aye ");
-  res.send('this is a profile!')
+app.get('/profile', (req, res) => {
+    console.log("aik request server per i");
+    res.send('this is a profile!')
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
